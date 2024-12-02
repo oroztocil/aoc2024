@@ -1,7 +1,9 @@
 use std::{collections::HashMap, fs};
 
-pub fn solve_part_one() -> i32 {
-    let (mut left, mut right) = get_nums("C:/Dev/aoc2024/src/day01/input.txt");
+const INPUT_PATH: &str = "C:/Dev/aoc2024/src/day01/input.txt";
+
+pub fn solve_first() -> i32 {
+    let (mut left, mut right) = get_nums(INPUT_PATH);
 
     left.sort();
     right.sort();
@@ -14,8 +16,8 @@ pub fn solve_part_one() -> i32 {
     total_diff
 }
 
-pub fn solve_part_two() -> i32 {
-    let (left, right) = get_nums("C:/Dev/aoc2024/src/day01/input.txt");
+pub fn solve_second() -> i32 {
+    let (left, right) = get_nums(INPUT_PATH);
     let mut histogram: HashMap<i32, i32> = HashMap::new();
 
     for num in right {
