@@ -1,5 +1,6 @@
 mod day01;
 mod day02;
+mod day03;
 mod utils;
 
 fn main() {
@@ -14,6 +15,10 @@ fn main() {
         2 => {
             println!("{}", day02::solve_first());
             println!("{}", day02::solve_second());
+        },
+        3 => {
+            println!("{}", day03::solve_first("C:/Dev/aoc2024/src/day03/input.txt"));
+            println!("{}", day03::solve_second("C:/Dev/aoc2024/src/day03/input.txt"));
         }
         _ => {
             println!("Day not implemented");
