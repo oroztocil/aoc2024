@@ -1,15 +1,13 @@
 use crate::utils::drop_element;
-use std::fs;
+use std::{fs, path::Path};
 
-const INPUT_PATH: &str = "C:/Dev/aoc2024/src/day02/input.txt";
-
-pub fn solve_first() -> usize {
-    let reports = get_reports(INPUT_PATH);
+pub fn solve_first(input_path: &Path) -> usize {
+    let reports = get_reports(input_path);
     reports.iter().filter(|r| is_report_valid(r, 0)).count()
 }
 
-pub fn solve_second() -> usize {
-    let reports = get_reports(INPUT_PATH);
+pub fn solve_second(input_path: &Path) -> usize {
+    let reports = get_reports(input_path);
     reports.iter().filter(|r| is_report_valid(r, 1)).count()
 }
 
@@ -43,7 +41,7 @@ fn check_report(report: &Vec<i32>, condition: fn(i32, i32) -> bool, errors_left:
     }
 }
 
-fn get_reports(path: &str) -> Vec<Vec<i32>> {
+fn get_reports(path: &Path) -> Vec<Vec<i32>> {
     fs::read_to_string(path)
         .expect("Error reading file")
         .lines()

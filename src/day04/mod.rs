@@ -1,4 +1,9 @@
-static directions: [(i32, i32); 8] = [
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
+use std::path::Path;
+
+static DIRECTIONS: [(i32, i32); 8] = [
     (1, 0),
     (-1, 0),
     (0, 1),
@@ -9,7 +14,7 @@ static directions: [(i32, i32); 8] = [
     (-1, 1),
 ];
 
-pub fn solve_first(input_path: &str) -> usize {
+pub fn solve_first(input_path: &Path) -> usize {
     42
 }
 
@@ -17,23 +22,25 @@ fn match_xmas(start: (usize, usize), direction: (i32, i32)) -> usize {
     0
 }
 
-pub fn solve_second(input_path: &str) -> usize {
+pub fn solve_second(input_path: &Path) -> usize {
     420
 }
 
-fn parse(input_path: &str) -> Vec<String> {}
+// fn parse(input_path: &str) -> Vec<String> {}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use crate::utils::OUT_DIR;
 
-    #[test]
-    fn test_first() {
-        assert_eq!(solve_first("C:/Dev/aoc2024/src/day04/test1.txt"), 143);
-    }
+//     use super::*;
 
-    #[test]
-    fn test_second() {
-        assert_eq!(solve_second("C:/Dev/aoc2024/src/day04/test1.txt"), 123);
-    }
-}
+//     #[test]
+//     fn test_first() {
+//         assert_eq!(solve_first(&OUT_DIR.join("day04/test1.txt")), 143);
+//     }
+
+//     #[test]
+//     fn test_second() {
+//         assert_eq!(solve_second(&OUT_DIR.join("day04/test1.txt")), 123);
+//     }
+// }

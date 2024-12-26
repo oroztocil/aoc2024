@@ -1,6 +1,6 @@
-use std::{cmp::Ordering, collections::HashMap, fs};
+use std::{cmp::Ordering, collections::HashMap, fs, path::Path};
 
-pub fn solve_first(input_path: &str) -> usize {
+pub fn solve_first(input_path: &Path) -> usize {
     let (rule_map, updates) = load_input(input_path);
     let empty_rules = Vec::<u32>::new();
 
@@ -23,7 +23,7 @@ pub fn solve_first(input_path: &str) -> usize {
     mid_elements.sum::<u32>() as usize
 }
 
-pub fn solve_second(input_path: &str) -> usize {
+pub fn solve_second(input_path: &Path) -> usize {
     let (rule_map, updates) = load_input(input_path);
     let empty_rules = Vec::<u32>::new();
 
@@ -55,7 +55,7 @@ pub fn solve_second(input_path: &str) -> usize {
     mid_elements.sum::<u32>() as usize
 }
 
-fn load_input(path: &str) -> (HashMap<u32, Vec<u32>>, Vec<Vec<u32>>) {
+fn load_input(path: &Path) -> (HashMap<u32, Vec<u32>>, Vec<Vec<u32>>) {
     let file_content = fs::read_to_string(path).expect("Error reading file");
     let (rule_part, update_part) = file_content.split_once("\n\n").unwrap();
     let rules = parse_rules(rule_part);
@@ -88,15 +88,17 @@ fn parse_updates(input: &str) -> Vec<Vec<u32>> {
 
 #[cfg(test)]
 mod tests {
+    use crate::utils::OUT_DIR;
+
     use super::*;
 
     #[test]
     fn test_first() {
-        assert_eq!(solve_first("C:/Dev/aoc2024/src/day05/test1.txt"), 143);
+        assert_eq!(solve_first(&std::path::Path::new(env!("OUT_DIR")).join("day05/test1.txt")), 143);
     }
 
     #[test]
     fn test_second() {
-        assert_eq!(solve_second("C:/Dev/aoc2024/src/day05/test1.txt"), 123);
+        assert_eq!(solve_second(&OUT_DIR.join("day05/test1.txt")), 123);
     }
 }

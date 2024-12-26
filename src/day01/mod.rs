@@ -1,9 +1,7 @@
-use std::{collections::HashMap, fs};
+use std::{collections::HashMap, fs, path::Path};
 
-const INPUT_PATH: &str = "C:/Dev/aoc2024/src/day01/input.txt";
-
-pub fn solve_first() -> i32 {
-    let (mut left, mut right) = get_nums(INPUT_PATH);
+pub fn solve_first(input_path: &Path) -> i32 {
+    let (mut left, mut right) = get_nums(input_path);
 
     left.sort();
     right.sort();
@@ -16,8 +14,8 @@ pub fn solve_first() -> i32 {
     total_diff
 }
 
-pub fn solve_second() -> i32 {
-    let (left, right) = get_nums(INPUT_PATH);
+pub fn solve_second(input_path: &Path) -> i32 {
+    let (left, right) = get_nums(input_path);
     let mut histogram: HashMap<i32, i32> = HashMap::new();
 
     for num in right {
@@ -33,7 +31,7 @@ pub fn solve_second() -> i32 {
     result
 }
 
-fn get_nums(path: &str) -> (Vec<i32>, Vec<i32>) {
+fn get_nums(path: &Path) -> (Vec<i32>, Vec<i32>) {
     let input = fs::read_to_string(path).expect("Error reading input file");
 
     let mut left: Vec<i32> = Vec::new();
