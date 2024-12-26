@@ -1,8 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use std::path::Path;
-
 static DIRECTIONS: [(i32, i32); 8] = [
     (1, 0),
     (-1, 0),
@@ -14,7 +12,7 @@ static DIRECTIONS: [(i32, i32); 8] = [
     (-1, 1),
 ];
 
-pub fn solve_first(input_path: &Path) -> usize {
+pub fn solve_first(input: &str) -> usize {
     42
 }
 
@@ -22,25 +20,26 @@ fn match_xmas(start: (usize, usize), direction: (i32, i32)) -> usize {
     0
 }
 
-pub fn solve_second(input_path: &Path) -> usize {
+pub fn solve_second(input: &str) -> usize {
     420
 }
 
 // fn parse(input_path: &str) -> Vec<String> {}
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::utils::OUT_DIR;
+#[cfg(test)]
+mod tests {
+    use crate::utils::read_input_file;
 
-//     use super::*;
+    use super::*;
 
-//     #[test]
-//     fn test_first() {
-//         assert_eq!(solve_first(&OUT_DIR.join("day04/test1.txt")), 143);
-//     }
+    #[test]
+    fn test_first() {
+        assert_eq!(solve_first(&read_input_file("day04/test1.txt")), 42);
+    }
 
-//     #[test]
-//     fn test_second() {
-//         assert_eq!(solve_second(&OUT_DIR.join("day04/test1.txt")), 123);
-//     }
-// }
+    #[test]
+    fn test_second() {
+        assert_eq!(solve_second(&read_input_file("day04/test1.txt")), 420);
+    }
+}
+

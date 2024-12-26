@@ -1,11 +1,11 @@
 use once_cell::sync::Lazy;
-use std::path::PathBuf;
+use std::{fs, path::PathBuf};
 
-pub static OUT_DIR: Lazy<PathBuf> = Lazy::new(|| {
-    let out_dir = env!("OUT_DIR");
-    PathBuf::from(out_dir)
-});
+static OUT_DIR: Lazy<PathBuf> = Lazy::new(|| PathBuf::from(env!("OUT_DIR")));
 
+pub fn read_input_file(relative_path: &str) -> String {
+    fs::read_to_string(OUT_DIR.join(relative_path)).expect("Error reading file")
+}
 
 pub fn drop_element(input: &Vec<i32>, index: usize) -> Vec<i32> {
     input

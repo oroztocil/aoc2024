@@ -1,13 +1,12 @@
 use crate::utils::drop_element;
-use std::{fs, path::Path};
 
-pub fn solve_first(input_path: &Path) -> usize {
-    let reports = get_reports(input_path);
+pub fn solve_first(input: &str) -> usize {
+    let reports = get_reports(input);
     reports.iter().filter(|r| is_report_valid(r, 0)).count()
 }
 
-pub fn solve_second(input_path: &Path) -> usize {
-    let reports = get_reports(input_path);
+pub fn solve_second(input: &str) -> usize {
+    let reports = get_reports(input);
     reports.iter().filter(|r| is_report_valid(r, 1)).count()
 }
 
@@ -41,9 +40,8 @@ fn check_report(report: &Vec<i32>, condition: fn(i32, i32) -> bool, errors_left:
     }
 }
 
-fn get_reports(path: &Path) -> Vec<Vec<i32>> {
-    fs::read_to_string(path)
-        .expect("Error reading file")
+fn get_reports(input: &str) -> Vec<Vec<i32>> {
+    input
         .lines()
         .map(|line| line.split(' ').map(|c| c.parse::<i32>().unwrap()).collect())
         .collect()

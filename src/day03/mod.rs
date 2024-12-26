@@ -1,12 +1,11 @@
 use regex::Regex;
-use std::{fs, path::Path};
 
-pub fn solve_first(input_path: &Path) -> usize {
-    find_and_sum_muls(&load_input(input_path))
+pub fn solve_first(input: &str) -> usize {
+    find_and_sum_muls(&input)
 }
 
-pub fn solve_second(input_path: &Path) -> usize {
-    load_input(&input_path)
+pub fn solve_second(input: &str) -> usize {
+    input
         .split("do()")
         .map(|part| part.split_once("don't()").map_or(part, |(first, _)| first))
         .map(|part| find_and_sum_muls(part))
@@ -26,23 +25,19 @@ fn find_and_sum_muls(input: &str) -> usize {
     total
 }
 
-fn load_input(path: &Path) -> String {
-    fs::read_to_string(path).expect("Error reading file")
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::utils::OUT_DIR;
+    use crate::utils::read_input_file;
 
     use super::*;
 
     #[test]
     fn test_first() {
-        assert_eq!(solve_first(&OUT_DIR.join("day03/test1.txt")), 161);
+        assert_eq!(solve_first(&read_input_file("day03/test1.txt")), 161);
     }
 
     #[test]
     fn test_second() {
-        assert_eq!(solve_second(&OUT_DIR.join("day03/test2.txt")), 48);
+        assert_eq!(solve_second(&read_input_file("day03/test2.txt")), 48);
     }
 }
