@@ -1,3 +1,5 @@
+pub mod grid;
+
 use once_cell::sync::Lazy;
 use std::{fs, path::PathBuf};
 
