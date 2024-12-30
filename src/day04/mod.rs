@@ -5,38 +5,38 @@ pub fn solve_first(input: &str) -> usize {
 
     let mut passes = vec![
         // Corner passes
-        grid.iter(0, 0, GridDirection::LeftToRight),
-        grid.iter(grid.width - 1, 0, GridDirection::RightToLeft),
-        grid.iter(0, grid.height - 1, GridDirection::LeftToRight),
-        grid.iter(grid.width - 1, grid.height - 1, GridDirection::RightToLeft),
+        grid.iter(0, 0, GridDirection::East),
+        grid.iter(grid.width - 1, 0, GridDirection::West),
+        grid.iter(0, grid.height - 1, GridDirection::East),
+        grid.iter(grid.width - 1, grid.height - 1, GridDirection::West),
     ];
 
     // Left column passes
     for y in 1..grid.height - 1 {
-        passes.push(grid.iter(0, y, GridDirection::LeftToRight));
-        passes.push(grid.iter(0, y, GridDirection::LeftTopToRightBottom));
-        passes.push(grid.iter(0, y, GridDirection::LeftBottomToRightTop));
+        passes.push(grid.iter(0, y, GridDirection::East));
+        passes.push(grid.iter(0, y, GridDirection::SouthEast));
+        passes.push(grid.iter(0, y, GridDirection::NorthEast));
     }
 
     // Right column passes
     for y in 1..grid.height - 1 {
-        passes.push(grid.iter(grid.width - 1, y, GridDirection::RightToLeft));
-        passes.push(grid.iter(grid.width - 1, y, GridDirection::RightBottomToLeftTop));
-        passes.push(grid.iter(grid.width - 1, y, GridDirection::RightTopToLeftBottom));
+        passes.push(grid.iter(grid.width - 1, y, GridDirection::West));
+        passes.push(grid.iter(grid.width - 1, y, GridDirection::NorthWest));
+        passes.push(grid.iter(grid.width - 1, y, GridDirection::SouthWest));
     }
 
     // Top row passes
     for x in 0..grid.width {
-        passes.push(grid.iter(x, 0, GridDirection::TopToBottom));
-        passes.push(grid.iter(x, 0, GridDirection::LeftTopToRightBottom));
-        passes.push(grid.iter(x, 0, GridDirection::RightTopToLeftBottom));
+        passes.push(grid.iter(x, 0, GridDirection::South));
+        passes.push(grid.iter(x, 0, GridDirection::SouthEast));
+        passes.push(grid.iter(x, 0, GridDirection::SouthWest));
     }
 
     // Bottom row passes
     for x in 0..grid.width {
-        passes.push(grid.iter(x, grid.height - 1, GridDirection::BottomToTop));
-        passes.push(grid.iter(x, grid.height - 1, GridDirection::RightBottomToLeftTop));
-        passes.push(grid.iter(x, grid.height - 1, GridDirection::LeftBottomToRightTop));
+        passes.push(grid.iter(x, grid.height - 1, GridDirection::North));
+        passes.push(grid.iter(x, grid.height - 1, GridDirection::NorthWest));
+        passes.push(grid.iter(x, grid.height - 1, GridDirection::NorthEast));
     }
 
     passes
@@ -53,10 +53,10 @@ pub fn solve_second(input: &str) -> usize {
         for y in 0..grid.height - 2 {
             let view = grid.view(x, y, 3, 3);
             let passes = [
-                view.iter(0, 0, GridDirection::LeftTopToRightBottom),
-                view.iter(2, 2, GridDirection::RightBottomToLeftTop),
-                view.iter(0, 2, GridDirection::LeftBottomToRightTop),
-                view.iter(2, 0, GridDirection::RightTopToLeftBottom),
+                view.iter(0, 0, GridDirection::SouthEast),
+                view.iter(2, 2, GridDirection::NorthWest),
+                view.iter(0, 2, GridDirection::NorthEast),
+                view.iter(2, 0, GridDirection::SouthWest),
             ];
 
             if passes
