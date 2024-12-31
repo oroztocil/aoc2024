@@ -8,7 +8,7 @@ pub struct Coords {
     pub y: i32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub enum GridDirection {
     East,
     West,
