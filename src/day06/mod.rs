@@ -4,8 +4,8 @@ use crate::utils::grid::{Coords, Grid, GridDirection};
 
 #[derive(Clone)]
 enum Tile {
-    Empty { visited: bool },
-    Wall { hit_from: HashSet<GridDirection> },
+    Empty,
+    Wall,
 }
 
 #[derive(Clone)]
@@ -19,77 +19,57 @@ struct LoopDetected;
 
 pub fn solve_first(input: &str) -> usize {
     let (grid, walker) = parse_input(input);
-    simulate(grid, walker)
-        .expect("Initial simulation stuck in loop")
-        .iter_all()
-        .filter(|tile| match tile {
-            Tile::Empty { visited: true } => true,
-            _ => false,
-        })
-        .count()
+    let visited_coords = simulate(&grid, walker).expect("Initial simulation stuck in loop");
+    visited_coords.len()
 }
 
 pub fn solve_second(input: &str) -> usize {
-    let (original_grid, original_walker) = parse_input(input);
+    let (mut grid, original_walker) = parse_input(input);
 
     // Get all visited non-start positions that candidates for obstruction placement
-    let simulated_grid = simulate(original_grid.clone(), original_walker.clone())
+    let mut visited_coords = simulate(&grid, original_walker.clone())
         .expect("Initial simulation stuck in loop");
 
-    let obstruction_candidates = simulated_grid
-        .enumerate_all()
-        .filter(|(x, y, tile)| match tile {
-            Tile::Empty { visited: true } => {
-                *x != original_walker.position.x || *y != original_walker.position.y
-            }
-            _ => false,
-        });
+    visited_coords.remove(&original_walker.position);
 
     let mut result = 0;
 
     // Try each possible obstruction position
     // Run simulation until either walker leaves grid,
     // or hits the obstruction twice from the same direction
-    for (x, y, _) in obstruction_candidates {
-        let mut grid = original_grid.clone();
-        grid.set(
-            x,
-            y,
-            Tile::Wall {
-                hit_from: HashSet::new(),
-            },
-        );
+    for obstruction_coords in visited_coords {
+        grid.set_by_coords(&obstruction_coords, Tile::Wall);
 
-        match simulate(grid, original_walker.clone()) {
+        match simulate(&grid, original_walker.clone()) {
             Ok(_) => {}
             Err(LoopDetected) => result += 1,
         }
+
+        grid.set_by_coords(&obstruction_coords, Tile::Empty);
     }
 
     result
 }
 
-fn simulate(mut grid: Grid<Tile>, mut walker: Walker) -> Result<Grid<Tile>, LoopDetected> {
+fn simulate(grid: &Grid<Tile>, mut walker: Walker) -> Result<HashSet<Coords>, LoopDetected> {
+    let mut wall_hit_directions = HashSet::<(Coords, GridDirection)>::new();
+    let mut visited_coords = HashSet::<Coords>::new();
+    visited_coords.insert(walker.position.clone());
+
     while let Some(coords) = grid.try_move(&walker.position, &walker.direction) {
         let target = grid.get_by_coords(&coords);
 
         match target {
-            Tile::Empty { .. } => {
-                grid.set_by_coords(&coords, Tile::Empty { visited: true });
+            Tile::Empty => {
+                visited_coords.insert(coords.clone());
                 walker.position = coords;
             }
-            Tile::Wall { hit_from } => {
-                if hit_from.contains(&walker.direction) {
+            Tile::Wall => {
+                let hit_direction = (coords, walker.direction.clone());
+                if wall_hit_directions.contains(&hit_direction) {
                     return Err(LoopDetected);
                 } else {
-                    let mut updated_hit_from = hit_from.clone();
-                    updated_hit_from.insert(walker.direction.clone());
-                    grid.set_by_coords(
-                        &coords,
-                        Tile::Wall {
-                            hit_from: updated_hit_from,
-                        },
-                    );
+                    wall_hit_directions.insert(hit_direction);
                 }
 
                 walker.direction = match walker.direction {
@@ -103,7 +83,7 @@ fn simulate(mut grid: Grid<Tile>, mut walker: Walker) -> Result<Grid<Tile>, Loop
         }
     }
 
-    Ok(grid)
+    Ok(visited_coords)
 }
 
 fn parse_input(input: &str) -> (Grid<Tile>, Walker) {
@@ -116,10 +96,8 @@ fn parse_input(input: &str) -> (Grid<Tile>, Walker) {
             line.chars()
                 .enumerate()
                 .map(|(x, c)| match c {
-                    '.' => Tile::Empty { visited: false },
-                    '#' => Tile::Wall {
-                        hit_from: HashSet::new(),
-                    },
+                    '.' => Tile::Empty,
+                    '#' => Tile::Wall,
                     '^' => {
                         walker = Some(Walker {
                             position: Coords {
@@ -128,7 +106,7 @@ fn parse_input(input: &str) -> (Grid<Tile>, Walker) {
                             },
                             direction: GridDirection::North,
                         });
-                        Tile::Empty { visited: true }
+                        Tile::Empty
                     }
                     _ => panic!("Unsupported input char"),
                 })
@@ -144,8 +122,7 @@ fn parse_input(input: &str) -> (Grid<Tile>, Walker) {
 impl fmt::Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let c = match self {
-            Tile::Empty { visited: true } => 'X',
-            Tile::Empty { visited: false } => '.',
+            Tile::Empty => '.',
             Tile::Wall { .. } => '#',
         };
         write!(f, "{c}")?;

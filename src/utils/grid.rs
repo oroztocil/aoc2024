@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Coords {
     pub x: i32,
     pub y: i32,
