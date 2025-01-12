@@ -1,6 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-
 use data::{parse_input, ComputationHalted, Computer, Int, RegisterState, State};
 
 mod data;

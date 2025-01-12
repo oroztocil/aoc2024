@@ -8,6 +8,7 @@ mod day05;
 mod day06;
 mod day07;
 mod day17;
+mod day21;
 mod utils;
 
 fn main() {
@@ -93,6 +94,16 @@ fn main() {
             println!(
                 "{}",
                 day17::solve_second(&read_input_file("day17/input.txt"))
+            );
+        }
+        21 => {
+            println!(
+                "{}",
+                day21::solve_first(&read_input_file("day21/input.txt"))
+            );
+            println!(
+                "{}",
+                day21::solve_second(&read_input_file("day21/input.txt"))
             );
         }
         _ => {
